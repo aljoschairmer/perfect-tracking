@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Palette is deliberately narrow: warm paper/charcoal ground, hairline borders,
+ * one brand accent (the tracking platform's own red), and a small set of status
+ * hues that only ever appear on status chips. Everything else is greyscale, so
+ * the data is the only thing with colour.
+ */
+:root {
+  --radius: 0.25rem;
+
+  --background: oklch(0.993 0.002 95);
+  --foreground: oklch(0.19 0.008 60);
+
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.52 0.17 27);
+  --primary-foreground: oklch(0.99 0.005 90);
+
+  --secondary: oklch(0.96 0.003 90);
+  --secondary-foreground: oklch(0.28 0.008 60);
+
+  --muted: oklch(0.965 0.003 90);
+  --muted-foreground: oklch(0.52 0.008 70);
+
+  --accent: oklch(0.955 0.004 90);
+  --accent-foreground: oklch(0.24 0.008 60);
+
+  --destructive: oklch(0.55 0.19 27);
+  --destructive-foreground: oklch(0.99 0.005 90);
+
+  --border: oklch(0.9 0.004 85);
+  --input: oklch(0.9 0.004 85);
+  --ring: oklch(0.52 0.17 27);
+
+  /* Status hues, keyed to the API's own badge classes. */
+  --status-race: oklch(0.58 0.15 150);
+  --status-finished: oklch(0.52 0.13 245);
+  --status-dnf: oklch(0.56 0.17 25);
+  --status-dsq: oklch(0.45 0.18 20);
+  --status-notstarted: oklch(0.6 0.01 70);
+  --status-waiting: oklch(0.62 0.06 250);
+  --status-karenzzeit: oklch(0.63 0.15 65);
+  --status-iofcl: oklch(0.6 0.12 300);
+
+  /* Group colours (API sends an index 0–9 per start group). */
+  --group-0: oklch(0.62 0.14 250);
+  --group-1: oklch(0.6 0.16 25);
+  --group-2: oklch(0.62 0.14 150);
+  --group-3: oklch(0.65 0.14 65);
+  --group-4: oklch(0.58 0.16 300);
+  --group-5: oklch(0.6 0.13 200);
+  --group-6: oklch(0.62 0.15 340);
+  --group-7: oklch(0.6 0.12 110);
+  --group-8: oklch(0.55 0.13 275);
+  --group-9: oklch(0.63 0.13 40);
+}
+
+.dark {
+  --background: oklch(0.165 0.006 65);
+  --foreground: oklch(0.93 0.004 90);
+
+  --card: oklch(0.198 0.006 65);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.198 0.006 65);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.62 0.18 27);
+  --primary-foreground: oklch(0.99 0.005 90);
+
+  --secondary: oklch(0.245 0.006 65);
+  --secondary-foreground: oklch(0.9 0.004 90);
+
+  --muted: oklch(0.235 0.006 65);
+  --muted-foreground: oklch(0.66 0.008 75);
+
+  --accent: oklch(0.26 0.007 65);
+  --accent-foreground: oklch(0.93 0.004 90);
+
+  --destructive: oklch(0.62 0.19 27);
+  --destructive-foreground: oklch(0.99 0.005 90);
+
+  --border: oklch(0.28 0.006 65);
+  --input: oklch(0.3 0.006 65);
+  --ring: oklch(0.62 0.18 27);
+
+  --status-race: oklch(0.72 0.16 150);
+  --status-finished: oklch(0.68 0.13 245);
+  --status-dnf: oklch(0.66 0.17 25);
+  --status-dsq: oklch(0.58 0.18 20);
+  --status-notstarted: oklch(0.62 0.01 70);
+  --status-waiting: oklch(0.7 0.07 250);
+  --status-karenzzeit: oklch(0.75 0.15 65);
+  --status-iofcl: oklch(0.7 0.13 300);
+
+  --group-0: oklch(0.72 0.14 250);
+  --group-1: oklch(0.7 0.17 25);
+  --group-2: oklch(0.74 0.15 150);
+  --group-3: oklch(0.78 0.15 65);
+  --group-4: oklch(0.7 0.16 300);
+  --group-5: oklch(0.72 0.13 200);
+  --group-6: oklch(0.72 0.16 340);
+  --group-7: oklch(0.74 0.13 110);
+  --group-8: oklch(0.68 0.14 275);
+  --group-9: oklch(0.75 0.14 40);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Timing data must stay column-aligned as digits tick over. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
+  }
+
+  /* Small uppercase field labels used across the dense panels. */
+  .label-xs {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+}
+
+/*
+ * Leaflet ships its own light chrome. These rules pull the map into the app's
+ * palette instead of leaving a bright card floating in the dark theme.
+ */
+.leaflet-container {
+  background: var(--muted);
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+.dark .pt-tiles {
+  /* One provider, two themes: greyscale first, then invert — rotating hues
+     instead would turn OSM's forests and water into garish false colour. The
+     result is a neutral dark basemap from the same raster source. */
+  filter: grayscale(1) invert(1) brightness(0.92) contrast(0.85);
+}
+
+.leaflet-bar a,
+.leaflet-control-attribution {
+  background: var(--card);
+  color: var(--muted-foreground);
+  border-color: var(--border);
+}
+
+.leaflet-bar a:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+.leaflet-control-attribution a {
+  color: var(--muted-foreground);
+}
+
+.leaflet-tooltip {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+  font-size: 0.75rem;
+}
+
+.leaflet-tooltip::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

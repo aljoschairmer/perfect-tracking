@@ -119,6 +119,17 @@ npx ptrack results raa2026 --strecke 71
 npx ptrack pois raa2026
 ```
 
+## Dashboard
+
+[`web/`](web/README.md) is a React dashboard built on this client — live map,
+classification, results, route profiles and drill-downs into any participant or
+checkpoint. Vite + Tailwind v4 + shadcn/ui + TanStack Query.
+
+```bash
+npm run build          # build the client first
+cd web && npm install && npm run dev
+```
+
 ## Notes & caveats
 
 - **Unofficial.** This calls a public JSON API found by reading the app's own JS bundle; perfect-tracking can change routes/shapes at any time. No affiliation with perfect-tracking GmbH.

@@ -33,6 +33,9 @@
   "bin": {
     "ptrack": "dist/cli.js"
   },
+  "browser": {
+    "./dist/html.js": "./dist/html.browser.js"
+  },
   "files": [
     "dist",
     "README.md",

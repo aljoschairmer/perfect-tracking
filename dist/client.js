@@ -16,10 +16,12 @@ export class PerfectTracking {
     fetchImpl;
     constructor(opts = {}) {
         this.baseUrl = opts.baseUrl ?? BASE_URL;
-        this.fetchImpl = opts.fetch ?? globalThis.fetch;
-        if (!this.fetchImpl) {
+        if (!opts.fetch && !globalThis.fetch) {
             throw new Error("No fetch implementation available. Use Node >=18 or pass opts.fetch.");
         }
+        // Browsers reject `fetch` invoked with any receiver other than the global
+        // object, and storing it on `this` would do exactly that.
+        this.fetchImpl = opts.fetch ?? globalThis.fetch.bind(globalThis);
     }
     async get(path, signal) {
         const url = `${this.baseUrl}${path}`;

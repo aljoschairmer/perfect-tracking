@@ -148,6 +148,24 @@ test("watchLive yields one snapshot per poll and stops on abort", async () => {
   assert.equal(seen.length, 1);
 });
 
+test("the default fetch keeps its global receiver (browsers reject any other)", async () => {
+  const original = globalThis.fetch;
+  // Stand in for the browser's strict check: real `fetch` throws "Illegal
+  // invocation" when its `this` is not the global object.
+  const strict = function (this: unknown) {
+    if (this !== globalThis && this !== undefined) throw new TypeError("Illegal invocation");
+    return Promise.resolve(new Response(JSON.stringify({ data: [] }), { status: 200 }));
+  } as unknown as typeof fetch;
+
+  globalThis.fetch = strict;
+  try {
+    const client = new PerfectTracking();
+    await assert.doesNotReject(() => client.listRaces());
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test("isRaceLive: test races are always live", () => {
   const client = new PerfectTracking({ fetch: fakeFetch() });
   assert.equal(client.isRaceLive({ test: true, ustoptime: 0 }), true);

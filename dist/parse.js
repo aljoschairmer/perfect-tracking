@@ -1,15 +1,11 @@
-import { parse as parseHtml } from "node-html-parser";
+import { badgeClasses, htmlToText } from "./html.js";
 export function sanitizeBadge(html) {
-    const root = parseHtml(html);
-    const span = root.querySelector("span.badge");
-    const text = (span ?? root).textContent.replace(/\s+/g, " ").trim();
-    const classes = span?.classList.value ?? [];
-    const colorClass = classes.find((c) => c !== "badge") ?? null;
-    return { text, colorClass };
+    const colorClass = badgeClasses(html).find((c) => c !== "badge") ?? null;
+    return { text: sanitizeText(html), colorClass };
 }
 /** Sanitize free-text fields (names, locations, ...) that may carry stray markup or whitespace. */
 export function sanitizeText(html) {
-    return parseHtml(html).textContent.replace(/\s+/g, " ").trim();
+    return htmlToText(html).replace(/\s+/g, " ").trim();
 }
 function toNumber(s) {
     return Number(s.replace(",", "."));
