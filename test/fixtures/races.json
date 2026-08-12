@@ -1,0 +1,47 @@
+{
+  "data": [
+    {
+      "icon": "",
+      "id": 43,
+      "info": "Das Race Around Austria holt Dich aus dem Alltag.<br>Mit dem Rad entlang der Grenzen Österreichs – alleine oder im Team.",
+      "link": "race/raa2026/ergebnisse",
+      "logo": "/assets/logo/raa.png",
+      "name": "RaceAroundAustria 2026",
+      "open": true,
+      "sname": "raa2026",
+      "starttime": "2026-08-10",
+      "stoptime": "2026-08-16",
+      "ustarttime": 1786312800,
+      "ustoptime": 1786914000
+    },
+    {
+      "icon": "",
+      "id": 39,
+      "info": "Das Race Around Austria holt Dich aus dem Alltag.<br>Mit dem Rad entlang der Grenzen Österreichs – alleine oder im Team.",
+      "link": "race/raa2025/ergebnisse",
+      "logo": "/assets/logo/raa.png",
+      "name": "RaceAroundAustria 2025",
+      "open": true,
+      "sname": "raa2025",
+      "starttime": "2025-08-11",
+      "stoptime": "2025-08-17",
+      "ustarttime": 1754863200,
+      "ustoptime": 1755464400
+    },
+    {
+      "icon": "",
+      "id": 38,
+      "info": "Das Race Around Austria holt Dich aus dem Alltag.<br>Mit dem Rad entlang der Grenzen Österreichs – alleine oder im Team.",
+      "link": "race/raa2024/ergebnisse",
+      "logo": "/assets/logo/raa.png",
+      "name": "RaceAroundAustria 2024",
+      "open": true,
+      "sname": "raa2024",
+      "starttime": "2024-08-12",
+      "stoptime": "2024-08-18",
+      "ustarttime": 1723413600,
+      "ustoptime": 1724014800
+    }
+  ],
+  "time": 1786572558
+}

@@ -1,0 +1,127 @@
+{
+  "data": {
+    "routes": [
+      {
+        "id": 71,
+        "stationen": [
+          {
+            "id": 1645,
+            "name": "Start",
+            "point": 0,
+            "rank": 0,
+            "type": 0
+          },
+          {
+            "id": 1646,
+            "name": "Straßwalchen",
+            "point": 781,
+            "rank": 1,
+            "type": 1
+          },
+          {
+            "id": 1647,
+            "name": "Mining",
+            "point": 2795,
+            "rank": 2,
+            "type": 1
+          },
+          {
+            "id": 1648,
+            "name": "Suben",
+            "point": 4001,
+            "rank": 3,
+            "type": 1
+          },
+          {
+            "id": 1649,
+            "name": "Donaubrücke",
+            "point": 5742,
+            "rank": 4,
+            "type": 1
+          }
+        ]
+      },
+      {
+        "id": 72,
+        "stationen": [
+          {
+            "id": 1695,
+            "name": "Start",
+            "point": 0,
+            "rank": 0,
+            "type": 0
+          },
+          {
+            "id": 1696,
+            "name": "Straßwalchen",
+            "point": 781,
+            "rank": 1,
+            "type": 1
+          },
+          {
+            "id": 1697,
+            "name": "Mining",
+            "point": 2795,
+            "rank": 2,
+            "type": 1
+          },
+          {
+            "id": 1698,
+            "name": "Suben",
+            "point": 4001,
+            "rank": 3,
+            "type": 1
+          },
+          {
+            "id": 1699,
+            "name": "Donaubrücke",
+            "point": 5742,
+            "rank": 4,
+            "type": 1
+          }
+        ]
+      },
+      {
+        "id": 70,
+        "stationen": [
+          {
+            "id": 1625,
+            "name": "Start",
+            "point": 0,
+            "rank": 0,
+            "type": 0
+          },
+          {
+            "id": 1626,
+            "name": "Straßwalchen",
+            "point": 780,
+            "rank": 1,
+            "type": 1
+          },
+          {
+            "id": 1627,
+            "name": "Mining",
+            "point": 2814,
+            "rank": 2,
+            "type": 1
+          },
+          {
+            "id": 1628,
+            "name": "Suben",
+            "point": 4029,
+            "rank": 3,
+            "type": 1
+          },
+          {
+            "id": 1629,
+            "name": "Donaubrücke",
+            "point": 5784,
+            "rank": 4,
+            "type": 1
+          }
+        ]
+      }
+    ]
+  },
+  "time": 1786572857
+}

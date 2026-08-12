@@ -1,0 +1,86 @@
+{
+  "data": {
+    "bindroute": true,
+    "extra": [],
+    "update": [
+      {
+        "finishest": "Sa. 20:21",
+        "finishestn": 26,
+        "finishesttol": "±5,1 h",
+        "geo": "AT-9584 Goritschach/Zagoriče",
+        "id": 2545,
+        "point": 36046,
+        "position": 0,
+        "rang": 5,
+        "runtime": "2d 03:39",
+        "runtimesec": 185961,
+        "speed": 9,
+        "station": 1668,
+        "stationtime": "Mi. 21:40",
+        "status": 1
+      },
+      {
+        "finishest": "Do. 16:18",
+        "finishestn": 154,
+        "finishesttol": "±1,3 h",
+        "geo": "AT-4170 Lichtenau im Mühlkreis",
+        "id": 2575,
+        "point": 8421,
+        "position": 0,
+        "rang": 2,
+        "runtime": "08:57",
+        "runtimesec": 32241,
+        "speed": 25,
+        "station": 1630,
+        "stationtime": "Mi. 23:28",
+        "status": 1
+      },
+      {
+        "geo": "AT-4143 Dorf",
+        "id": 2616,
+        "point": 6213,
+        "position": 0,
+        "rang": 22,
+        "runtime": "08:34",
+        "runtimesec": 30861,
+        "speed": 0,
+        "station": 1629,
+        "stationtime": "Mi. 21:47",
+        "status": 3
+      },
+      {
+        "finishest": "Do. 14:35",
+        "finishestn": 215,
+        "finishesttol": "±1,0 h",
+        "geo": "AT-4170 Raiden",
+        "id": 2630,
+        "point": 8639,
+        "position": 0,
+        "rang": 8,
+        "runtime": "08:22",
+        "runtimesec": 30141,
+        "speed": 9,
+        "station": 1630,
+        "stationtime": "Mi. 23:16",
+        "status": 1
+      },
+      {
+        "finishest": "Do. 09:48",
+        "finishestn": 52,
+        "finishesttol": "±0,3 h",
+        "geo": "AT-4170 Herrnschlag",
+        "id": 2647,
+        "point": 8950,
+        "position": 0,
+        "rang": 1,
+        "runtime": "06:01",
+        "runtimesec": 21681,
+        "speed": 28,
+        "station": 1630,
+        "stationtime": "Mi. 23:19",
+        "status": 1
+      }
+    ]
+  },
+  "time": 1786572561
+}

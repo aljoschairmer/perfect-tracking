@@ -1,0 +1,42 @@
+{
+    "data": {
+        "geotiming": true,
+        "gesamt": null,
+        "icon": "",
+        "id": 43,
+        "info": "Das Race Around Austria holt Dich aus dem Alltag.<br>Mit dem Rad entlang der Grenzen \u00d6sterreichs \u2013 alleine oder im Team.",
+        "infolong": "Mit dem Rad 2.200 km (30.000 H\u00f6henmeter) NONSTOP entlang der grenznahen Stra\u00dfen einmal rund um \u00d6sterreichs \u2013 alleine oder im Team.",
+        "logo": "/assets/logo/raa.png",
+        "map": 0,
+        "name": "RaceAroundAustria 2026",
+        "sname": "raa2026",
+        "strecken": [
+            {
+                "bindroute": true,
+                "id": 71,
+                "info": "Das Extreme Race Around Austria ist das h\u00e4rteste Radrennen Europas und Qualifikationsrennen f\u00fcr das legend\u00e4re Race Across America. 2.200 km entlang der grenznahen Stra\u00dfen rund um \u00d6sterreich \u2013 alleine oder im Team!",
+                "name": "RAA Extreme",
+                "rang": 2
+            },
+            {
+                "bindroute": true,
+                "id": 72,
+                "info": "Das Race Around Austria 1500 unterscheidet sich in seiner L\u00e4nge vom klassischen Race Around Austria. Hinsichtlich Betreuer, Pace Car und Sicherheitsvorkehrungen, technischer Abnahme usw. sind alle Regeln des Race Around Austria gleich. Damit ist der Bewerb die optimale Vorbereitung die gesamte Umrundung und auch f\u00fcr alle geeignet, die sich mit l\u00e4ngeren Pausen einem Extremradrennen stellen wollen.",
+                "name": "RAA 1500",
+                "rang": 5
+            },
+            {
+                "bindroute": true,
+                "id": 70,
+                "info": "Die Race Around Austria CHALLENGE (560 Kilometer, ca 6.500 H\u00f6henmeter) ist das Einstiegsrennen in den Ultraradsport. Sie ist als 24-Stunden-Rennen ausgelegt und f\u00fchrt die Teilnehmer entlang der ober\u00f6sterreichischen Landesgrenze.",
+                "name": "CHALLENGE",
+                "rang": 10
+            }
+        ],
+        "test": false,
+        "title": "Race Around Austria 2026",
+        "ustarttime": 1786312800,
+        "ustoptime": 1786914000
+    },
+    "time": 1786572546
+}

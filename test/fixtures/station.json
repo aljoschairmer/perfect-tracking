@@ -1,0 +1,72 @@
+{
+  "data": {
+    "altitude": 557,
+    "gruppen": [
+      {
+        "data": [
+          [
+            1,
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Yvonne Margraf",
+              "/race/raa2026/teilnehmer/2546"
+            ],
+            "20",
+            "1d 22:04",
+            "00:00 ",
+            "23,27",
+            "Mi. 12. Aug 18:36"
+          ],
+          [
+            2,
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Sara Mazzorana",
+              "/race/raa2026/teilnehmer/2547"
+            ],
+            "19",
+            "1d 23:12",
+            "00:00 ",
+            "22,71",
+            "Mi. 12. Aug 19:46"
+          ],
+          [
+            3,
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Herbert Manz*",
+              "/race/raa2026/teilnehmer/2550"
+            ],
+            "18",
+            "2d 00:27",
+            "00:00 ",
+            "22,13",
+            "Mi. 12. Aug 21:03"
+          ]
+        ],
+        "name": "RAA Extreme Solo"
+      },
+      {
+        "data": [
+          [
+            "-",
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Sport Scherz Wörschach",
+              "/race/raa2026/teilnehmer/2569"
+            ],
+            "201",
+            "00:00",
+            "00:00 ",
+            "0,00",
+            "-"
+          ]
+        ],
+        "name": "2er Teams"
+      }
+    ],
+    "name": "Finkenstein",
+    "way": "1072,20"
+  },
+  "time": 1786572514
+}

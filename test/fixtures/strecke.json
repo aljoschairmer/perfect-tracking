@@ -1,0 +1,62 @@
+{
+  "data": {
+    "stations": [
+      {
+        "altitude": 542,
+        "id": 1645,
+        "link": "/race/raa2026/station/1645",
+        "name": "Start",
+        "point": 0,
+        "rank": 0,
+        "show": true,
+        "type": 0,
+        "way": "0,00"
+      },
+      {
+        "altitude": 520,
+        "id": 1646,
+        "link": "/race/raa2026/station/1646",
+        "name": "Straßwalchen",
+        "point": 781,
+        "rank": 1,
+        "show": true,
+        "type": 1,
+        "way": "22,22"
+      },
+      {
+        "altitude": 332,
+        "id": 1647,
+        "link": "/race/raa2026/station/1647",
+        "name": "Mining",
+        "point": 2795,
+        "rank": 2,
+        "show": true,
+        "type": 1,
+        "way": "74,68"
+      },
+      {
+        "altitude": 323,
+        "id": 1648,
+        "link": "/race/raa2026/station/1648",
+        "name": "Suben",
+        "point": 4001,
+        "rank": 3,
+        "show": true,
+        "type": 1,
+        "way": "105,05"
+      },
+      {
+        "altitude": 288,
+        "id": 1649,
+        "link": "/race/raa2026/station/1649",
+        "name": "Donaubrücke",
+        "point": 5742,
+        "rank": 4,
+        "show": true,
+        "type": 1,
+        "way": "159,33"
+      }
+    ]
+  },
+  "time": 1786572826
+}

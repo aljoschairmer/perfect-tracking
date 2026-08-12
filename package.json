@@ -1,0 +1,57 @@
+{
+  "name": "perfect-tracking-client",
+  "version": "0.1.0",
+  "description": "Unofficial client for the perfect-tracking.com live race tracking platform (Race Around Austria and others) — races, live positions, results, routes and POIs.",
+  "keywords": [
+    "perfect-tracking",
+    "race-around-austria",
+    "raa",
+    "live-tracking",
+    "gps",
+    "cycling",
+    "ultracycling",
+    "race",
+    "endurance",
+    "client"
+  ],
+  "type": "module",
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aljoschairmer/perfect-tracking.git"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "ptrack": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && node --test",
+    "cli": "node --experimental-strip-types src/cli.ts"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}

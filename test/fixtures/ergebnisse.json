@@ -1,0 +1,76 @@
+{
+  "data": {
+    "gruppen": [
+      {
+        "data": [
+          [
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Sara Mazzorana",
+              "/race/raa2026/teilnehmer/2547"
+            ],
+            "19",
+            "Kötschach Mauthen",
+            1,
+            "2d 02:35",
+            "00:00 ",
+            "22,74",
+            "Mi. 12. Aug 23:09"
+          ],
+          [
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Yvonne Margraf",
+              "/race/raa2026/teilnehmer/2546"
+            ],
+            "20",
+            "Kötschach Mauthen",
+            2,
+            "2d 03:08",
+            "00:00 ",
+            "22,49",
+            "Mi. 12. Aug 23:40"
+          ],
+          [
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Herbert Manz*",
+              "/race/raa2026/teilnehmer/2550"
+            ],
+            "18",
+            "Finkenstein",
+            3,
+            "2d 00:27",
+            "00:00 ",
+            "22,13",
+            "Mi. 12. Aug 21:03"
+          ]
+        ],
+        "id": 197,
+        "name": "RAA Extreme: RAA Extreme Solo"
+      },
+      {
+        "data": [
+          [
+            "<span class=\"badge race\">Race</span>",
+            [
+              "Sport Scherz Wörschach",
+              "/race/raa2026/teilnehmer/2569"
+            ],
+            "201",
+            "Drosendorf",
+            1,
+            "14:03",
+            "00:00 ",
+            "28,59",
+            "Mi. 12. Aug 22:35"
+          ]
+        ],
+        "id": 199,
+        "name": "RAA Extreme: 2er Teams"
+      }
+    ],
+    "time": "Do. 13. Aug 00:08"
+  },
+  "time": 1786572497
+}

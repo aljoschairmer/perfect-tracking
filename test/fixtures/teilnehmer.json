@@ -1,0 +1,68 @@
+{
+  "data": {
+    "gruppe": "TEAM CHALLENGE",
+    "infoort": "Wolfgang Krenn AUT<br> Gerhard Schimpl AUT",
+    "name": "1OF1 Bikes / Hemetsberger Dach",
+    "startnummer": "C-207",
+    "stationen": [
+      [
+        0,
+        [
+          "Start",
+          "/race/raa2026/station/1625"
+        ],
+        "0,00",
+        542,
+        1,
+        "00:00",
+        "00:00 ",
+        "0,00",
+        "Mi. 12. Aug 18:08"
+      ],
+      [
+        1,
+        [
+          "Straßwalchen",
+          "/race/raa2026/station/1626"
+        ],
+        "22,12",
+        523,
+        1,
+        "00:32",
+        "00:00 ",
+        "41,48",
+        "Mi. 12. Aug 18:40"
+      ],
+      [
+        2,
+        [
+          "Mining",
+          "/race/raa2026/station/1627"
+        ],
+        "74,78",
+        332,
+        1,
+        "01:45",
+        "00:00 ",
+        "42,44",
+        "Mi. 12. Aug 19:53"
+      ],
+      [
+        3,
+        [
+          "Suben",
+          "/race/raa2026/station/1628"
+        ],
+        "105,23",
+        325,
+        1,
+        "02:27",
+        "00:00 ",
+        "42,69",
+        "Mi. 12. Aug 20:35"
+      ]
+    ],
+    "status": "<span class=\"badge race\">Race</span>"
+  },
+  "time": 1786572514
+}
