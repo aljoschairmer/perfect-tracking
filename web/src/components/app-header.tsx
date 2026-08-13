@@ -1,4 +1,5 @@
-import type { RaceSummary } from "perfect-tracking-client";
+import { useEffect, useState } from "react";
+import { POLL_INTERVAL_MS, type RaceSummary } from "perfect-tracking-client";
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -57,17 +58,37 @@ export function AppHeader({
 }
 
 function LiveIndicator({ live, updatedAt, isFetching }: { live: boolean; updatedAt: Date | undefined; isFetching: boolean }) {
+  // A ticking clock, so silently stalled polling (offline, tab throttled)
+  // becomes visible instead of showing a fresh-looking green dot forever.
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!live) return;
+    const timer = setInterval(() => setNow(Date.now()), 5_000);
+    return () => clearInterval(timer);
+  }, [live]);
+
   if (!live) {
     return <span className="label-xs">Archiv</span>;
   }
+
+  const ageMs = updatedAt ? now - updatedAt.getTime() : undefined;
+  const stale = ageMs != null && ageMs > POLL_INTERVAL_MS * 3;
+
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="flex items-center gap-2"
+      title={stale ? `Letzte Aktualisierung vor ${Math.round(ageMs / 60_000)} min` : undefined}
+    >
       <span
-        className={cn("size-1.5 rounded-full bg-[var(--status-race)]", isFetching && "animate-pulse")}
+        className={cn(
+          "size-1.5 rounded-full",
+          stale ? "bg-destructive" : "bg-[var(--status-race)]",
+          isFetching && "animate-pulse"
+        )}
         aria-hidden
       />
-      <span className="label-xs">
-        Live
+      <span className={cn("label-xs", stale && "text-destructive")}>
+        {stale ? "Keine neuen Daten" : "Live"}
         {updatedAt && (
           <span className="tabular ml-1.5 normal-case tracking-normal">
             {updatedAt.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}

@@ -55,6 +55,27 @@ The tracking API sends no CORS headers. `vite.config.ts` proxies `/api`
 upstream in dev, which keeps the client's `baseUrl` a plain relative `/api/`;
 any static host can do the same with a rewrite rule.
 
+## Ranking logic
+
+With staggered starts, clock times don't compare — everything the board adds
+works around that:
+
+- **Bucket order** (`statusOrder`): finishers first by final time, then the
+  racing field, then OTL/DNF/DSQ/DNS. Sort modes only reorder the racing field.
+- **Sort modes**: course position, average pace (start-time independent),
+  organiser ETA, or net time at a timing station.
+- **Netto @ Station** (`useNetTimes`): net times for everyone at one station
+  come from a single station-page request. "Auto" anchors at the furthest
+  station reached; "letzte gemeinsame" at the last one everybody passed.
+- **Zwischenzeiten tab** (`SplitsMatrix`): stations × riders from the
+  participant pages, as gap / net / segment / clock views. Placeholder rows
+  (rank 0, time 00:00) are treated as "no valid split" — taken literally they
+  would become the best time of their row.
+
+Favourites, filters and view modes persist in `localStorage`
+(`usePersistentState`); race, route, tab and selected rider mirror into the
+URL (`useUrlSync`), so any view can be shared as a link.
+
 ## Notes
 
 - German UI copy, matching the source data.

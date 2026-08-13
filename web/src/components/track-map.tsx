@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef } from "react";
 import L from "leaflet";
-import type { RoutePoint, StationDetail } from "perfect-tracking-client";
+import { sanitizeText, type Poi, type RoutePoint, type StationDetail } from "perfect-tracking-client";
 
 import { MAP_TOKENS, useThemeTokens } from "@/hooks/use-theme-tokens";
-import type { Rider } from "@/lib/live";
+import { statusOrder, type Rider } from "@/lib/live";
 import { cn } from "@/lib/utils";
 
 import "leaflet/dist/leaflet.css";
@@ -17,6 +17,8 @@ interface TrackMapProps {
   track: RoutePoint[];
   riders: Rider[];
   stations?: StationDetail[];
+  pois?: Poi[];
+  showStations?: boolean;
   selectedId?: number;
   onSelect?: (riderId: number) => void;
   className?: string;
@@ -31,19 +33,24 @@ interface TrackMapProps {
  * rider layer is re-keyed every 20 seconds, and moving existing markers is far
  * cheaper than tearing down and rebuilding a hundred components.
  */
-export function TrackMap({ track, riders, stations, selectedId, onSelect, className }: TrackMapProps) {
+export function TrackMap({ track, riders, stations, pois, showStations = true, selectedId, onSelect, className }: TrackMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map>(null);
   const routeLayerRef = useRef<L.Polyline>(null);
+  const endsLayerRef = useRef<L.LayerGroup>(null);
   const stationLayerRef = useRef<L.LayerGroup>(null);
+  const poiLayerRef = useRef<L.LayerGroup>(null);
   const riderLayerRef = useRef<L.LayerGroup>(null);
   const markersRef = useRef(new Map<number, L.CircleMarker>());
 
   const tokens = useThemeTokens(MAP_TOKENS);
 
-  // Keep the latest click handler reachable without rebinding every marker.
+  // Keep the latest click handler reachable without rebinding every marker,
+  // and the latest rider set reachable from lazily-built station tooltips.
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const ridersRef = useRef(riders);
+  ridersRef.current = riders;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -63,7 +70,9 @@ export function TrackMap({ track, riders, stations, selectedId, onSelect, classN
       className: "pt-tiles",
     }).addTo(map);
 
+    endsLayerRef.current = L.layerGroup().addTo(map);
     stationLayerRef.current = L.layerGroup().addTo(map);
+    poiLayerRef.current = L.layerGroup().addTo(map);
     riderLayerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
@@ -74,7 +83,9 @@ export function TrackMap({ track, riders, stations, selectedId, onSelect, classN
       map.remove();
       mapRef.current = null;
       routeLayerRef.current = null;
+      endsLayerRef.current = null;
       stationLayerRef.current = null;
+      poiLayerRef.current = null;
       riderLayerRef.current = null;
       markersRef.current.clear();
     };
@@ -104,9 +115,32 @@ export function TrackMap({ track, riders, stations, selectedId, onSelect, classN
   }, [latLngs, tokens]);
 
   useEffect(() => {
+    const layer = endsLayerRef.current;
+    if (!layer) return;
+    layer.clearLayers();
+    if (latLngs.length < 2) return;
+
+    const start = latLngs[0];
+    const finish = latLngs[latLngs.length - 1];
+    // A loop course ends where it began; two overlapping markers would fight
+    // over the same tooltip.
+    const isLoop = Math.hypot(start[0] - finish[0], start[1] - finish[1]) < 0.005;
+    const style: L.CircleMarkerOptions = {
+      radius: 6,
+      color: tokens["--foreground"] || "#333",
+      weight: 2,
+      fillColor: tokens["--background"] || "#fff",
+      fillOpacity: 1,
+    };
+    L.circleMarker(start, style).bindTooltip(isLoop ? "Start/Ziel" : "Start").addTo(layer);
+    if (!isLoop) L.circleMarker(finish, style).bindTooltip("Ziel").addTo(layer);
+  }, [latLngs, tokens]);
+
+  useEffect(() => {
     const layer = stationLayerRef.current;
     if (!layer) return;
     layer.clearLayers();
+    if (!showStations) return;
 
     for (const station of stations ?? []) {
       const point = track[Math.min(station.point, track.length - 1)];
@@ -118,10 +152,37 @@ export function TrackMap({ track, riders, stations, selectedId, onSelect, classN
         fillOpacity: 1,
         weight: 1.5,
       })
-        .bindTooltip(`${station.name} · ${station.way} km`)
+        // Content is built on hover, so the pass count is current without
+        // rebuilding fifty markers every 20-second poll.
+        .bindTooltip(() => {
+          const field = ridersRef.current.filter((rider) => statusOrder(rider.update?.status) <= 1);
+          const passed = field.filter((rider) => (rider.update?.point ?? -1) >= station.point).length;
+          const count = field.length > 0 ? ` · ${passed} von ${field.length} durch` : "";
+          return `${sanitizeText(station.name)} · km ${station.way}${count}`;
+        })
         .addTo(layer);
     }
-  }, [stations, track, tokens]);
+  }, [stations, track, tokens, showStations]);
+
+  useEffect(() => {
+    const layer = poiLayerRef.current;
+    if (!layer) return;
+    layer.clearLayers();
+
+    for (const poi of pois ?? []) {
+      const point = track[Math.min(poi.point, track.length - 1)];
+      if (!point) continue;
+      L.circleMarker([point[0], point[1]], {
+        radius: 4,
+        color: tokens["--background"] || "#fff",
+        weight: 1.5,
+        fillColor: tokens[`--group-${poi.color % 10}`] || "#888",
+        fillOpacity: 0.9,
+      })
+        .bindTooltip(sanitizeText(poi.infoshort || "Streckenpunkt"))
+        .addTo(layer);
+    }
+  }, [pois, track, tokens]);
 
   useEffect(() => {
     const layer = riderLayerRef.current;
