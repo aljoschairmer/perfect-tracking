@@ -3,7 +3,7 @@ import type {
   ApiEnvelope,
   LiveInitSnapshot,
   LiveUpdateSnapshot,
-  Poi,
+  PoiSnapshot,
   Race,
   RaceSummary,
   ResultsSnapshot,
@@ -13,6 +13,7 @@ import type {
   Strecke,
   StreckeDetail,
   ParticipantPage,
+  ServerStamped,
 } from "./types.js";
 
 export interface PerfectTrackingOptions {
@@ -55,14 +56,34 @@ export class PerfectTracking {
     this.fetchImpl = opts.fetch ?? globalThis.fetch.bind(globalThis);
   }
 
-  private async get<T>(path: string, signal?: AbortSignal): Promise<T> {
+  /**
+   * Raw request against any endpoint, returning the full `{ data, time }`
+   * envelope. The typed methods below unwrap it for you; reach for this when
+   * you need the server clock from an endpoint that doesn't already carry it,
+   * or to call a route this client doesn't wrap yet.
+   */
+  async request<T>(path: string, signal?: AbortSignal): Promise<ApiEnvelope<T>> {
     const url = `${this.baseUrl}${path}`;
     const res = await this.fetchImpl(url, { signal });
     if (!res.ok) {
       throw new Error(`perfect-tracking request failed: HTTP ${res.status} for ${url}`);
     }
-    const body = (await res.json()) as ApiEnvelope<T>;
-    return body.data;
+    return (await res.json()) as ApiEnvelope<T>;
+  }
+
+  private async get<T>(path: string, signal?: AbortSignal): Promise<T> {
+    return (await this.request<T>(path, signal)).data;
+  }
+
+  /**
+   * Like {@link get}, but folds the envelope's server clock into the payload as
+   * `serverTime`. Used for the polled endpoints, where how old the data is
+   * matters as much as the data — the local receive time can't tell you whether
+   * a position is fresh or the server itself is lagging.
+   */
+  private async getStamped<T extends object>(path: string, signal?: AbortSignal): Promise<T & ServerStamped> {
+    const body = await this.request<T>(path, signal);
+    return { ...body.data, serverTime: body.time };
   }
 
   /** All public races (`Race/Races`). */
@@ -99,8 +120,8 @@ export class PerfectTracking {
   }
 
   /** Points of interest for the live map (`Race/DataPois/{raceId}`). The app polls this every 20s. */
-  getPois(raceId: number, signal?: AbortSignal): Promise<{ pois: Poi[] }> {
-    return this.get(`Race/DataPois/${raceId}`, signal);
+  getPois(raceId: number, signal?: AbortSignal): Promise<PoiSnapshot> {
+    return this.getStamped<PoiSnapshot>(`Race/DataPois/${raceId}`, signal);
   }
 
   /** Results for one route variant (`Ergebnisse/Data/{streckeId}`). Rows need {@link parseResultRow}. */
@@ -125,17 +146,21 @@ export class PerfectTracking {
 
   /** Initial live snapshot for one route variant (`Live/DataLive/{streckeId}`). */
   getLiveInit(streckeId: number, signal?: AbortSignal): Promise<LiveInitSnapshot> {
-    return this.get<LiveInitSnapshot>(`Live/DataLive/${streckeId}`, signal);
+    return this.getStamped<LiveInitSnapshot>(`Live/DataLive/${streckeId}`, signal);
   }
 
   /** Initial live snapshot for the whole race (`Live/DataLiveAll/{raceId}`). Call this once, then {@link watchLive}. */
   getLiveInitAll(raceId: number, signal?: AbortSignal): Promise<LiveInitSnapshot> {
-    return this.get<LiveInitSnapshot>(`Live/DataLiveAll/${raceId}`, signal);
+    return this.getStamped<LiveInitSnapshot>(`Live/DataLiveAll/${raceId}`, signal);
   }
 
-  /** One incremental live-position poll (`Live/DataLiveUpdateAll/{raceId}`). Prefer {@link watchLive} for continuous tracking. */
+  /**
+   * One incremental live-position poll (`Live/DataLiveUpdateAll/{raceId}`).
+   * The result carries `serverTime`, so you can tell a stale feed from a slow
+   * request. Prefer {@link watchLive} for continuous tracking.
+   */
   getLiveUpdate(raceId: number, signal?: AbortSignal): Promise<LiveUpdateSnapshot> {
-    return this.get<LiveUpdateSnapshot>(`Live/DataLiveUpdateAll/${raceId}`, signal);
+    return this.getStamped<LiveUpdateSnapshot>(`Live/DataLiveUpdateAll/${raceId}`, signal);
   }
 
   /**

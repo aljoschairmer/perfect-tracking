@@ -7,6 +7,18 @@ export interface ApiEnvelope<T> {
   time?: number;
 }
 
+/**
+ * Carried by the polled snapshots, so consumers can show the true age of the
+ * data rather than the time their own request happened to come back.
+ */
+export interface ServerStamped {
+  /**
+   * Server clock (unix seconds) when the response was generated, taken from the
+   * envelope's `time`. Undefined if the endpoint omitted it.
+   */
+  serverTime?: number;
+}
+
 /** One row from `Race/Races` — the public race list. */
 export interface RaceSummary {
   id: number;
@@ -154,7 +166,7 @@ export interface LiveUpdateEntry {
   finishesttol?: string;
 }
 
-export interface LiveInitSnapshot {
+export interface LiveInitSnapshot extends ServerStamped {
   bindroute: boolean;
   extra: unknown[];
   gruppen: LiveGroup[];
@@ -163,10 +175,15 @@ export interface LiveInitSnapshot {
   update?: LiveUpdateEntry[];
 }
 
-export interface LiveUpdateSnapshot {
+export interface LiveUpdateSnapshot extends ServerStamped {
   bindroute: boolean;
   extra: unknown[];
   update: LiveUpdateEntry[];
+}
+
+/** `Race/DataPois/{raceId}` — polled alongside the live map. */
+export interface PoiSnapshot extends ServerStamped {
+  pois: Poi[];
 }
 
 /**

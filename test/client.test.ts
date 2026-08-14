@@ -148,6 +148,25 @@ test("watchLive yields one snapshot per poll and stops on abort", async () => {
   assert.equal(seen.length, 1);
 });
 
+test("polled endpoints expose the envelope's server clock as serverTime", async () => {
+  const client = makeClient();
+  const update = await client.getLiveUpdate(43);
+  const init = await client.getLiveInitAll(43);
+  const pois = await client.getPois(43);
+  // the fixtures carry the upstream `time` value alongside `data`
+  assert.equal(update.serverTime, fixture("live-update.json").time);
+  assert.equal(init.serverTime, fixture("live-init.json").time);
+  assert.equal(pois.serverTime, fixture("pois.json").time);
+  assert.equal(typeof update.serverTime, "number");
+});
+
+test("request() returns the whole envelope for any endpoint", async () => {
+  const client = makeClient();
+  const body = await client.request<{ pois: unknown[] }>("Race/DataPois/43");
+  assert.ok(body.data);
+  assert.equal(body.time, fixture("pois.json").time);
+});
+
 test("the default fetch keeps its global receiver (browsers reject any other)", async () => {
   const original = globalThis.fetch;
   // Stand in for the browser's strict check: real `fetch` throws "Illegal

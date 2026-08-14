@@ -122,6 +122,7 @@ export default function App() {
         onSlugChange={setSlug}
         live={isLive}
         updatedAt={live.updatedAt}
+        updatedAtIsServerTime={live.updatedAtIsServerTime}
         isFetching={live.isFetching}
       />
 

@@ -28,11 +28,21 @@ export function useLiveRace(raceId: number | undefined, live: boolean) {
     return mergeRiders(init.data.teilnehmer, init.data.gruppen, entries);
   }, [init.data, update.data]);
 
+  // Prefer the server's own clock over our receive time: it distinguishes a
+  // slow request from a feed that has actually stopped moving.
+  const serverTime = update.data?.serverTime;
+
   return {
     riders,
     groups: init.data?.gruppen ?? [],
     bindRoute: update.data?.bindroute ?? init.data?.bindroute ?? true,
-    updatedAt: update.dataUpdatedAt ? new Date(update.dataUpdatedAt) : undefined,
+    updatedAt: serverTime
+      ? new Date(serverTime * 1000)
+      : update.dataUpdatedAt
+        ? new Date(update.dataUpdatedAt)
+        : undefined,
+    /** True when the timestamp came from the API rather than our own clock. */
+    updatedAtIsServerTime: serverTime != null,
     isFetching: update.isFetching,
     loading: init.isPending,
     error: (init.error ?? update.error) as Error | null,

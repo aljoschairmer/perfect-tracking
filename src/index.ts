@@ -16,6 +16,7 @@ export type {
 } from "./parse.js";
 export type {
   ApiEnvelope,
+  ServerStamped,
   RaceSummary,
   StreckeSummary,
   Race,
@@ -32,6 +33,7 @@ export type {
   LiveUpdateEntry,
   LiveInitSnapshot,
   LiveUpdateSnapshot,
+  PoiSnapshot,
   ResultRow,
   ResultGroup,
   ResultsSnapshot,

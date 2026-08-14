@@ -33,6 +33,11 @@ official site uses, taken from the package's `POLL_INTERVAL_MS`.
 `useLiveRace` joins the two so a poll that omits a rider leaves their last
 known position standing instead of blanking the row.
 
+The "Live" timestamp in the header is the API's own `serverTime`, not the local
+receive time — it shows when the data was actually generated, so a feed that
+has stopped moving is distinguishable from a slow request. It falls back to the
+local clock (marked "lokal") if the endpoint omits the stamp.
+
 ### The map
 
 Leaflet with OpenStreetMap raster tiles, the same combination the official

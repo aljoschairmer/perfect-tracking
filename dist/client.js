@@ -23,14 +23,32 @@ export class PerfectTracking {
         // object, and storing it on `this` would do exactly that.
         this.fetchImpl = opts.fetch ?? globalThis.fetch.bind(globalThis);
     }
-    async get(path, signal) {
+    /**
+     * Raw request against any endpoint, returning the full `{ data, time }`
+     * envelope. The typed methods below unwrap it for you; reach for this when
+     * you need the server clock from an endpoint that doesn't already carry it,
+     * or to call a route this client doesn't wrap yet.
+     */
+    async request(path, signal) {
         const url = `${this.baseUrl}${path}`;
         const res = await this.fetchImpl(url, { signal });
         if (!res.ok) {
             throw new Error(`perfect-tracking request failed: HTTP ${res.status} for ${url}`);
         }
-        const body = (await res.json());
-        return body.data;
+        return (await res.json());
+    }
+    async get(path, signal) {
+        return (await this.request(path, signal)).data;
+    }
+    /**
+     * Like {@link get}, but folds the envelope's server clock into the payload as
+     * `serverTime`. Used for the polled endpoints, where how old the data is
+     * matters as much as the data — the local receive time can't tell you whether
+     * a position is fresh or the server itself is lagging.
+     */
+    async getStamped(path, signal) {
+        const body = await this.request(path, signal);
+        return { ...body.data, serverTime: body.time };
     }
     /** All public races (`Race/Races`). */
     listRaces(signal) {
@@ -61,7 +79,7 @@ export class PerfectTracking {
     }
     /** Points of interest for the live map (`Race/DataPois/{raceId}`). The app polls this every 20s. */
     getPois(raceId, signal) {
-        return this.get(`Race/DataPois/${raceId}`, signal);
+        return this.getStamped(`Race/DataPois/${raceId}`, signal);
     }
     /** Results for one route variant (`Ergebnisse/Data/{streckeId}`). Rows need {@link parseResultRow}. */
     getResults(streckeId, signal) {
@@ -81,15 +99,19 @@ export class PerfectTracking {
     }
     /** Initial live snapshot for one route variant (`Live/DataLive/{streckeId}`). */
     getLiveInit(streckeId, signal) {
-        return this.get(`Live/DataLive/${streckeId}`, signal);
+        return this.getStamped(`Live/DataLive/${streckeId}`, signal);
     }
     /** Initial live snapshot for the whole race (`Live/DataLiveAll/{raceId}`). Call this once, then {@link watchLive}. */
     getLiveInitAll(raceId, signal) {
-        return this.get(`Live/DataLiveAll/${raceId}`, signal);
+        return this.getStamped(`Live/DataLiveAll/${raceId}`, signal);
     }
-    /** One incremental live-position poll (`Live/DataLiveUpdateAll/{raceId}`). Prefer {@link watchLive} for continuous tracking. */
+    /**
+     * One incremental live-position poll (`Live/DataLiveUpdateAll/{raceId}`).
+     * The result carries `serverTime`, so you can tell a stale feed from a slow
+     * request. Prefer {@link watchLive} for continuous tracking.
+     */
     getLiveUpdate(raceId, signal) {
-        return this.get(`Live/DataLiveUpdateAll/${raceId}`, signal);
+        return this.getStamped(`Live/DataLiveUpdateAll/${raceId}`, signal);
     }
     /**
      * Continuously poll live positions, mirroring how the web app itself refreshes

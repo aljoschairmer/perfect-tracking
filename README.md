@@ -79,7 +79,7 @@ await client.getPois(raceId);              // { pois: Poi[] }
 
 ```ts
 await client.getLiveInitAll(raceId);       // LiveInitSnapshot — groups + participants
-await client.getLiveUpdate(raceId);        // LiveUpdateSnapshot — one poll
+await client.getLiveUpdate(raceId);        // LiveUpdateSnapshot — one poll (carries serverTime)
 
 for await (const update of client.watchLive(raceId, { signal })) {
   // fires once immediately, then every 20s (like the web app) until aborted
@@ -107,6 +107,26 @@ const results = (await client.getResultsAll(raceId)).gruppen
 ```
 
 `sanitizeBadge(html)` and `sanitizeText(html)` are exported too, if you need to clean up a raw fragment yourself.
+
+### Data age
+
+Every response is wrapped in `{ data, time }`, where `time` is the server's own
+clock. The methods unwrap `data` for you, but the **polled** endpoints
+(`getLiveInit`, `getLiveInitAll`, `getLiveUpdate`, `getPois`) also carry that
+clock through as `serverTime` — so you can tell a stale feed from a slow
+request, which the local receive time can't:
+
+```ts
+const update = await client.getLiveUpdate(raceId);
+const ageSeconds = Date.now() / 1000 - update.serverTime!;
+```
+
+For the envelope of any other endpoint, use the generic escape hatch — it also
+lets you call routes this client doesn't wrap yet:
+
+```ts
+const { data, time } = await client.request<Race>("Race/Race/raa2026");
+```
 
 ## CLI
 

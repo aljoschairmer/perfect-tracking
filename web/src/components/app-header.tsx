@@ -13,6 +13,7 @@ export function AppHeader({
   onSlugChange,
   live,
   updatedAt,
+  updatedAtIsServerTime,
   isFetching,
 }: {
   races: RaceSummary[];
@@ -20,6 +21,7 @@ export function AppHeader({
   onSlugChange: (slug: string) => void;
   live: boolean;
   updatedAt: Date | undefined;
+  updatedAtIsServerTime: boolean;
   isFetching: boolean;
 }) {
   const { theme, toggle } = useTheme();
@@ -48,7 +50,12 @@ export function AppHeader({
       </Select>
 
       <div className="ml-auto flex items-center gap-3">
-        <LiveIndicator live={live} updatedAt={updatedAt} isFetching={isFetching} />
+        <LiveIndicator
+          live={live}
+          updatedAt={updatedAt}
+          updatedAtIsServerTime={updatedAtIsServerTime}
+          isFetching={isFetching}
+        />
         <Button variant="ghost" size="icon" onClick={toggle} aria-label="Farbschema wechseln">
           {theme === "dark" ? <Sun /> : <Moon />}
         </Button>
@@ -57,7 +64,17 @@ export function AppHeader({
   );
 }
 
-function LiveIndicator({ live, updatedAt, isFetching }: { live: boolean; updatedAt: Date | undefined; isFetching: boolean }) {
+function LiveIndicator({
+  live,
+  updatedAt,
+  updatedAtIsServerTime,
+  isFetching,
+}: {
+  live: boolean;
+  updatedAt: Date | undefined;
+  updatedAtIsServerTime: boolean;
+  isFetching: boolean;
+}) {
   // A ticking clock, so silently stalled polling (offline, tab throttled)
   // becomes visible instead of showing a fresh-looking green dot forever.
   const [now, setNow] = useState(() => Date.now());
@@ -71,13 +88,28 @@ function LiveIndicator({ live, updatedAt, isFetching }: { live: boolean; updated
     return <span className="label-xs">Archiv</span>;
   }
 
+  // `updatedAt` is the API's own stamp when it provides one, so this catches a
+  // feed that stopped moving upstream too — not just a client that stopped
+  // asking. Three poll intervals leaves room for normal latency and any modest
+  // clock skew between the server and this machine.
   const ageMs = updatedAt ? now - updatedAt.getTime() : undefined;
   const stale = ageMs != null && ageMs > POLL_INTERVAL_MS * 3;
+  const clock = updatedAt?.toLocaleTimeString("de-AT", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   return (
     <div
       className="flex items-center gap-2"
-      title={stale ? `Letzte Aktualisierung vor ${Math.round(ageMs / 60_000)} min` : undefined}
+      title={
+        stale
+          ? `Letzte Aktualisierung vor ${Math.round(ageMs / 60_000)} min`
+          : updatedAtIsServerTime
+            ? "Zeitstempel des Servers \u2014 das tats\u00e4chliche Alter der Daten"
+            : "Lokale Empfangszeit (Server lieferte keinen Zeitstempel)"
+      }
     >
       <span
         className={cn(
@@ -89,9 +121,10 @@ function LiveIndicator({ live, updatedAt, isFetching }: { live: boolean; updated
       />
       <span className={cn("label-xs", stale && "text-destructive")}>
         {stale ? "Keine neuen Daten" : "Live"}
-        {updatedAt && (
+        {clock && (
           <span className="tabular ml-1.5 normal-case tracking-normal">
-            {updatedAt.toLocaleTimeString("de-AT", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+            {clock}
+            {!updatedAtIsServerTime && <span className="ml-1 opacity-60">lokal</span>}
           </span>
         )}
       </span>
