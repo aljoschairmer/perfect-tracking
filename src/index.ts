@@ -2,6 +2,8 @@ export { PerfectTracking } from "./client.js";
 export type { PerfectTrackingOptions, WatchLiveOptions } from "./client.js";
 export { BASE_URL, POLL_INTERVAL_MS, STATUS, STATION_TYPE } from "./constants.js";
 export type { StatusCode } from "./constants.js";
+export { toGpx, stationWaypoints } from "./gpx.js";
+export type { GpxOptions, GpxWaypoint } from "./gpx.js";
 export {
   parseResultRow,
   parseParticipantStationRow,

@@ -128,6 +128,22 @@ lets you call routes this client doesn't wrap yet:
 const { data, time } = await client.request<Race>("Race/Race/raa2026");
 ```
 
+### GPX export
+
+Route tracks come with elevation, so they export straight to GPX — loadable in
+any bike computer, Strava or Komoot. Timing stations become waypoints:
+
+```ts
+import { toGpx, stationWaypoints } from "perfect-tracking-client";
+
+const [route, strecke] = await Promise.all([client.getRoute(id), client.getStrecke(id)]);
+const gpx = toGpx(route.route, {
+  name: "RAA Extreme",
+  waypoints: stationWaypoints(strecke.stations, route.route),
+  everyNth: 8, // thin a 76k-point track for devices that can't take it
+});
+```
+
 ## CLI
 
 ```bash
@@ -137,6 +153,8 @@ npx ptrack live raa2026 --json
 npx ptrack live raa2026 --watch              # keep polling every 20s, like the web app
 npx ptrack results raa2026 --strecke 71
 npx ptrack pois raa2026
+npx ptrack gpx raa2026 --strecke 71 --out raa-extreme.gpx
+npx ptrack gpx raa2026 --strecke 71 --every 8 --out lite.gpx   # thinned for devices
 ```
 
 ## Dashboard

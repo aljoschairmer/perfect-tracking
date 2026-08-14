@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+import { writeFileSync } from "node:fs";
 import { PerfectTracking } from "./client.js";
+import { toGpx, stationWaypoints } from "./gpx.js";
 import { parseResultRow } from "./parse.js";
 const HELP = `perfect-tracking — query the perfect-tracking.com live race API
 
@@ -9,12 +11,16 @@ Usage:
   ptrack live <slug> [options]       Live positions (one snapshot, or --watch)
   ptrack results <slug> [options]    Results table
   ptrack pois <slug>                 Points of interest on the live map
+  ptrack gpx <slug> [options]        Export a route variant as GPX
 
 Options:
   --strecke <id>    Restrict to one route variant (default: all)
   --watch           (live) keep polling every --interval and print updates
   --interval <ms>   (live --watch) poll interval, default 20000 (matches the web app)
   --json            Output JSON instead of a table
+  --out <file>      (gpx) write to a file instead of stdout
+  --every <n>       (gpx) keep every nth track point (default 1 = all)
+  --no-waypoints    (gpx) omit timing stations as waypoints
 
 Examples:
   ptrack races
@@ -22,6 +28,7 @@ Examples:
   ptrack live raa2026 --json
   ptrack live raa2026 --watch
   ptrack results raa2026 --strecke 71
+  ptrack gpx raa2026 --strecke 71 --out raa-extreme.gpx
 `;
 function parseArgs(argv) {
     const flags = {};
@@ -84,6 +91,28 @@ async function main() {
     }
     const race = await client.getRace(slug);
     const streckeId = flags.strecke ? Number(flags.strecke) : -1;
+    if (cmd === "gpx") {
+        const variant = streckeId !== -1 ? race.strecken.find((s) => s.id === streckeId) : race.strecken[0];
+        if (!variant) {
+            console.error(`Race "${slug}" has no route variant ${streckeId}.`);
+            process.exit(1);
+        }
+        const [route, strecke] = await Promise.all([client.getRoute(variant.id), client.getStrecke(variant.id)]);
+        const xml = toGpx(route.route, {
+            name: `${race.name} — ${variant.name}`,
+            description: `${route.route.at(-1)?.[2].toFixed(1) ?? "?"} km · perfect-tracking.com`,
+            waypoints: flags["no-waypoints"] ? [] : stationWaypoints(strecke.stations, route.route),
+            everyNth: flags.every ? Number(flags.every) : 1,
+        });
+        if (flags.out) {
+            writeFileSync(String(flags.out), xml);
+            console.error(`${xml.split("\n").length} Zeilen -> ${flags.out}`);
+        }
+        else {
+            process.stdout.write(xml);
+        }
+        return;
+    }
     if (cmd === "pois") {
         const { pois } = await client.getPois(race.id);
         console.log(JSON.stringify(pois, null, 2));
