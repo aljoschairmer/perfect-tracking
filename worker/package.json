@@ -1,0 +1,23 @@
+{
+  "name": "perfect-tracking-worker",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Polls the live race feed on a fixed cadence and writes a periodic analysis.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "npm run build && node dist/index.js",
+    "dev": "node --experimental-strip-types src/index.ts",
+    "report": "node dist/report-once.js"
+  },
+  "dependencies": {
+    "perfect-tracking-client": "file:.."
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}
