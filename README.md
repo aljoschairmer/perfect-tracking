@@ -42,9 +42,6 @@ Full endpoint map (all under `https://race.perfect-tracking.com/api/`):
 | `Live/DataLive(All)/{id}` | Initial live snapshot: groups + participants |
 | `Live/DataLiveUpdateAll/{raceId}` | Incremental position/status deltas (polled every 20s) |
 
-A few endpoints return **HTML fragments embedded inside otherwise-clean JSON** — e.g. a result row's status is a raw `<span class="badge race">Race</span>` string. This package parses those with a real HTML parser (`node-html-parser`, not a regex) via {@link sanitizeBadge}/{@link sanitizeText}, so markup can't leak into the values you get back and you also get the badge's color class (`race`, `dnf`, `finished`, ...) alongside the plain-text label.
-
-This was all reverse-engineered from the public frontend; there's no official API documentation. Endpoints/shapes can change without notice.
 
 ## Install
 
